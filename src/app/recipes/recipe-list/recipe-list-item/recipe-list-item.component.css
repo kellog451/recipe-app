@@ -1,0 +1,14 @@
+.recipeDiv {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: solid 1px #ccc;
+  margin: 1rem auto;
+  border-radius: 4px;
+}
+
+.recipeDiv:hover {
+  background-color: rgb(240, 240, 240);
+  cursor: pointer;
+  border-color: rgb(255, 96, 38);
+}

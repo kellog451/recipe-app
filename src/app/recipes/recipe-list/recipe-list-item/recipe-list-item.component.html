@@ -1,0 +1,12 @@
+<div class="recipeDiv" (click)="selectRecipe(recipe)">
+  <img
+    [src]="recipe.imageUrl"
+    alt="recipe Image"
+    class="img-responsive"
+    style="max-height: 120px"
+  />
+  <div class="" style="padding: 10px">
+    <p>{{ recipe.name }}</p>
+    <p>{{ recipe.description }}</p>
+  </div>
+</div>
