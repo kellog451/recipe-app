@@ -1,12 +1,11 @@
 <p>recipes works!</p>
 <div class="row">
   <div class="col-md-4">
-    <app-recipe-list
-      (selectedRecipeObject)="setRecipe($event)"
-    ></app-recipe-list>
+    <app-recipe-list></app-recipe-list>
   </div>
   <div class="col-md-8">
-    <app-recipe-details
+    <router-outlet></router-outlet>
+    <!-- <app-recipe-details
       *ngIf="selectedRecipe; else notFound"
       [recipe]="selectedRecipe"
     ></app-recipe-details>
@@ -14,6 +13,6 @@
       ><p class="text-center fw-bold text-danger">
         Please Select A Recipe
       </p></ng-template
-    >
+    > -->
   </div>
 </div>

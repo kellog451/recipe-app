@@ -1,8 +1,13 @@
 <div>
-  <h1>{{ recipe.name }}</h1>
+  <div class="flexBtn">
+    <h1>{{ recipe.name }}</h1>
+    <button class="btn btn-outline-success" (click)="editRecipe()">
+      &#9998; Edit Recipe
+    </button>
+  </div>
   <hr />
   <div>
-    <h3>How to make Recipe</h3>
+    <h3>{{ recipe.description }}</h3>
     <p>
       <span>Step 1</span>
       Open 2 x 400g tins of chickpeas and drain, reserving 2 tbsp of the brine.

@@ -41,6 +41,10 @@ li {
   margin: 0 0.5rem;
 }
 
+.active {
+  background-color: black;
+}
+
 a,
 a:visited,
 a:hover {

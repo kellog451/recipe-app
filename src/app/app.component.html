@@ -1,12 +1,11 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <!-- Toolbar -->
-<app-header (navigate)="getSelectedRoute($event)"></app-header>
-
+<app-header></app-header>
 <div class="content" role="main">
-  <button class="btn btn-info">Bootstrap Test</button>
-  <app-recipes *ngIf="currentMenu === 'recipe'"></app-recipes>
-  <app-shopping-list *ngIf="currentMenu !== 'recipe'"></app-shopping-list>
+  <!-- <app-recipes *ngIf="currentMenu === 'recipe'"></app-recipes>
+  <app-shopping-list *ngIf="currentMenu !== 'recipe'"></app-shopping-list> -->
+  <router-outlet></router-outlet>
 </div>
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->

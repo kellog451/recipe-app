@@ -1,4 +1,6 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { RecipeService } from 'src/app/services/Recipe.service';
 import { Recipe } from '../recipe.model';
 
 @Component({
@@ -7,37 +9,14 @@ import { Recipe } from '../recipe.model';
   styleUrls: ['./recipe-list.component.css'],
 })
 export class RecipeListComponent implements OnInit {
-  @Output() selectedRecipeObject = new EventEmitter<Recipe>();
-  recipes: Recipe[] = [
-    new Recipe(
-      'Shawarma Recipe',
-      'recipe for Shawarma',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIAfLqeImOPh_UFUGIZhcptAlYetBx9_djw&usqp=CAU'
-    ),
-    new Recipe(
-      'Pizza Recipe',
-      'recipe for sddasda',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIAfLqeImOPh_UFUGIZhcptAlYetBx9_djw&usqp=CAU'
-    ),
-    new Recipe(
-      'Beef Recipe',
-      'recipe for asdasds',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIAfLqeImOPh_UFUGIZhcptAlYetBx9_djw&usqp=CAU'
-    ),
-    new Recipe(
-      'Chappati Recipe',
-      'recipe for sdasds',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTjIAfLqeImOPh_UFUGIZhcptAlYetBx9_djw&usqp=CAU'
-    ),
-  ];
+  recipes: Recipe[] = [];
+  constructor(private recipeService: RecipeService, private route: Router) {}
 
-  constructor() {
-    console.log('------------> ', this.recipes);
+  ngOnInit() {
+    this.recipes = this.recipeService.getRecipes();
   }
 
-  setSelectedRecipe(recipe: Recipe) {
-    this.selectedRecipeObject.emit(recipe);
+  addNewRecipe() {
+    this.route.navigate(['/recipes', 'add']);
   }
-
-  ngOnInit(): void {}
 }

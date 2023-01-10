@@ -10,6 +10,12 @@ import { ShoppingListComponent } from './shopping-list/shopping-list.component';
 import { EditListItemComponent } from './shopping-list/edit-list-item/edit-list-item.component';
 import { RecipeListItemComponent } from './recipes/recipe-list/recipe-list-item/recipe-list-item.component';
 import { CardDirectiveDirective } from './shared/card-directive.directive';
+import { AppRoutingModule } from './app.routing.module';
+import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { ShoppingListService } from './services/ShoppingList.service';
+import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
 
 @NgModule({
   declarations: [
@@ -21,12 +27,12 @@ import { CardDirectiveDirective } from './shared/card-directive.directive';
     ShoppingListComponent,
     EditListItemComponent,
     RecipeListItemComponent,
-    CardDirectiveDirective
+    CardDirectiveDirective,
+    RecipeStartComponent,
+    RecipeEditComponent,
   ],
-  imports: [
-    BrowserModule
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  providers: [ShoppingListService],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

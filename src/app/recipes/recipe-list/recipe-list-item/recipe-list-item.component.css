@@ -8,7 +8,12 @@
 }
 
 .recipeDiv:hover {
-  background-color: rgb(240, 240, 240);
+  /* background-color: rgb(240, 240, 240); */
   cursor: pointer;
-  border-color: rgb(255, 96, 38);
+  /* border-color: rgb(255, 96, 38); */
+}
+
+.active {
+  background-color: blue;
+  color: white;
 }

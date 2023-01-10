@@ -8,8 +8,10 @@
   <span>Angular Recipe</span>
 
   <ul class="nav navbar">
-    <li><a href="#" (click)="selectRoute('recipe')">Recipes</a></li>
-    <li><a href="#" (click)="selectRoute('shopping')">Shopping List</a></li>
+    <li><a routerLinkActive="active" routerLink="/recipes">Recipes</a></li>
+    <li>
+      <a routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
+    </li>
   </ul>
   <div class="spacer"></div>
   <a

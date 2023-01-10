@@ -22,9 +22,8 @@ p {
 }
 
 .content {
-  margin: auto;
+  margin: 5rem auto;
   padding: 0 16px;
-  border: solid 1px red;
 }
 
 a,

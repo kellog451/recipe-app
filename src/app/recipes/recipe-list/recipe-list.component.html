@@ -1,8 +1,12 @@
-<h3>Recipe List <button>Add Recipe</button></h3>
+<div class="flexBtn">
+  <h3>Recipe List</h3>
+  <button class="btn btn-outline-primary" (click)="addNewRecipe()">
+    &#x2b; Add Recipe
+  </button>
+</div>
 <div>
   <app-recipe-list-item
     *ngFor="let item of recipes"
     [recipe]="item"
-    (selectedRecipe)="setSelectedRecipe(item)"
   ></app-recipe-list-item>
 </div>
