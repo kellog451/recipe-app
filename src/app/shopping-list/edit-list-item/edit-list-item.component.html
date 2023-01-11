@@ -1,28 +1,50 @@
-<p>Shopping List Item</p>
+<h2>Add Shopping List Items</h2>
 <div class="row">
   <div class="col-xs-12">
-    <form>
+    <form [formGroup]="shoppingForm" (ngSubmit)="addIngredient()">
       <div class="row">
         <div class="col-sm-5 form-group">
           <label for="name">Name</label>
-          <input type="text" id="name" class="form-control" #nameInput />
+          <input
+            type="text"
+            id="name"
+            name="item"
+            class="form-control"
+            formControlName="item"
+          />
         </div>
         <div class="col-sm-2 form-group">
           <label for="amount">Amount</label>
-          <input type="number" id="amount" class="form-control" #amountInput />
+          <input
+            type="number"
+            id="amount"
+            name="amount"
+            class="form-control"
+            pattern="^[1-9]+[0-9]*$"
+            formControlName="amount"
+          />
         </div>
       </div>
       <div class="row my-4">
         <div class="col-xs-12">
           <button
             class="btn btn-success"
-            type="button"
-            (click)="addIngredient()"
+            type="submit"
+            [disabled]="!shoppingForm.valid"
           >
-            Add
+            {{ editMode ? "Edit" : "Add to Shopping list" }}
           </button>
-          <button class="btn btn-danger" type="button">Delete</button>
-          <button class="btn btn-primary" type="button">Clear</button>
+          <button
+            class="btn btn-danger"
+            type="button"
+            *ngIf="editMode"
+            (click)="deleteIngredient()"
+          >
+            Delete
+          </button>
+          <button class="btn btn-primary" (click)="clearForm()" type="button">
+            Clear
+          </button>
         </div>
       </div>
     </form>

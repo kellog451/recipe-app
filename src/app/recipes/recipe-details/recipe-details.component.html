@@ -8,37 +8,12 @@
   <hr />
   <div>
     <h3>{{ recipe.description }}</h3>
-    <p>
-      <span>Step 1</span>
-      Open 2 x 400g tins of chickpeas and drain, reserving 2 tbsp of the brine.
-      Put half the chickpeas into a food processor and whizz for 30 seconds,
-      then 1 tbsp of the reserved liquid, 2 finely chopped spring onions, 4
-      crushed garlic cloves, 1 tsp ground cumin, 1 tsp ground coriander, a pinch
-      of allspice, 1 tsp salt, 1/2 tsp baking powder, 4 tbsp flour and a large
-      bunch each of fresh parsley and coriander.
-    </p>
-    <p>
-      <span>Step 2</span>
-      Whizz again until smooth and well combined, then add the remaining
-      chickpeas and whizz very briefly – you want the second addition of
-      chickpeas to stay coarse in the mixture. If the mixture seems a little
-      dry, add more of the reserved liquid until you achieve the desired
-      consistency.
-    </p>
-    <p>
-      <span>Step 3</span> Spoon the mixture into a bowl and chill in the fridge
-      for 30 mins.
-    </p>
-    <p>
-      <span>Step 4</span>
-      Meanwhile, make the herby humors. Add 1 x 400g tin drained chickpeas, 3
-      tsp tahini and a couple of teaspoons of cold water to the food processor
-      and blitz for 2-3 minutes, until smooth. Add in the 1 crushed garlic
-      clove, 1 tsp salt, 3 tbsp extra-virgin olive oil, the juice of 1/2 a
-      lemon, and a large pinch of paprika. Blitz again until the humors is very
-      smooth, adding more water if the mixture is too thick. Add a small bunch
-      of chopped fresh parsley or coriander and blitz until well-distributed.
-      Spoon into a bowl and chill until required.
+    <p
+      class="bg-light border p-2"
+      *ngFor="let step of recipe.steps; let i = index"
+    >
+      <span>Step {{ i + 1 }}</span>
+      {{ step }}
     </p>
   </div>
 </div>

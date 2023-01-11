@@ -9,7 +9,13 @@ import { RecipeService } from 'src/app/services/Recipe.service';
   styleUrls: ['./recipe-details.component.css'],
 })
 export class RecipeDetailsComponent implements OnInit {
-  recipe: { id: number; name: string; description: string; imageUrl: string };
+  recipe: {
+    id: number;
+    name: string;
+    description: string;
+    imageUrl: string;
+    steps: string[];
+  };
   constructor(
     private recipeService: RecipeService,
     private activeRoute: ActivatedRoute,
