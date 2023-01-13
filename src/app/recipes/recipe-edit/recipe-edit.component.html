@@ -1,26 +1,27 @@
-<p *ngIf="!isEditing">recipe-add works!</p>
-<div *ngIf="isEditing">
-  <div class="row mt-2">
-    <form [formGroup]="recipeForm">
-      <div class="form-group">
+<div>
+  <div class="row mt-1">
+    <form [formGroup]="recipeForm" (ngSubmit)="submitForm()">
+      <div class="form-group mt-2">
         <label for="title">Recipe Title</label>
         <input
           name="title"
           class="form-control"
           id="title"
-          formControlName="title"
+          formControlName="name"
         />
       </div>
-      <div class="form-group">
+      <div class="form-group mt-2">
         <label for="imageUrl">Image Url</label>
         <input
           name="imageUrl"
           class="form-control"
           id="imageUrl"
           formControlName="imageUrl"
+          #imageLink
         />
+        <img [src]="imageLink.value" alt="" />
       </div>
-      <div class="form-group">
+      <div class="form-group mt-2">
         <label for="description">Description</label>
         <input
           name="description"
@@ -29,20 +30,64 @@
           formControlName="description"
         />
       </div>
-      <div class="form-group">
+      <div class="form-group mt-2 flexBtn">
         <label for="steps">Recipe Steps</label>
-        <textarea
-          name="steps"
-          class="form-control"
-          formControlName="steps"
-          id="steps"
-          cols="30"
-          rows="10"
-        ></textarea>
+        <div>
+          <button
+            type="button"
+            class="btn btn-info py-1 me-2"
+            (click)="addRecipeStep()"
+          >
+            &#x2b; Add Step
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-danger py-1"
+            (click)="deleteRecipeStep()"
+          >
+            &#10005;&#10005; Delete Steps
+          </button>
+        </div>
+      </div>
+      <div formArrayName="steps">
+        <div
+          class="form-group mt-2"
+          *ngFor="let stepControl of getRecipeSteps(); let i = index"
+        >
+          <div class="flexBtn">
+            <label for="steps">Step {{ i + 1 }}</label>
+            <span
+              class="text-danger border m-1 px-1 bg-grey"
+              title="delete step"
+              role="button"
+              (click)="onDeleteStep(i)"
+              >&#10005;</span
+            >
+          </div>
+          <textarea
+            class="form-control"
+            [defaultValue]="stepControl?.value || ''"
+            [formControlName]="i"
+            cols="30"
+            rows="2"
+          ></textarea>
+        </div>
       </div>
       <div class="text-end mt-2">
-        <button class="btn btn-success px-5 me-2" type="submit">Save</button>
-        <button class="btn btn-danger px-5" type="button">Cancel</button>
+        <button
+          class="btn btn-success px-5 me-2"
+          type="submit"
+          [disabled]="!recipeForm.valid"
+        >
+          {{ isEditing ? "Save" : "Add Recipe" }}
+        </button>
+        <button
+          class="btn btn-danger px-5"
+          (click)="cancelAction()"
+          type="button"
+        >
+          Cancel
+        </button>
       </div>
     </form>
   </div>

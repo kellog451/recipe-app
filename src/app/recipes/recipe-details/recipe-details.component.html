@@ -1,9 +1,14 @@
 <div>
   <div class="flexBtn">
     <h1>{{ recipe.name }}</h1>
-    <button class="btn btn-outline-success" (click)="editRecipe()">
-      &#9998; Edit Recipe
-    </button>
+    <div class="buttons">
+      <button class="btn btn-outline-success me-2" (click)="editRecipe()">
+        &#9998; Edit Recipe
+      </button>
+      <button class="btn btn-outline-danger" (click)="deleteRecipe()">
+        &#10005; Delete Recipe
+      </button>
+    </div>
   </div>
   <hr />
   <div>
