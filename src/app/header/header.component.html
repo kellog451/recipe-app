@@ -1,5 +1,5 @@
 <!-- * * * * * * * * * * * *   Header   * * * * * * * * * * * * * * * * -->
-<div class="toolbar" role="banner">
+<div class="toolbar">
   <img
     width="40"
     alt="Angular Logo"
@@ -12,8 +12,22 @@
     <li>
       <a routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
     </li>
+    <li>
+      <a routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
+    </li>
+    <li class="ms-5">
+      <button class="btn btn-outline-default" (click)="saveData()">
+        Save Data
+      </button>
+    </li>
+    <li>
+      <button class="btn btn-outline-default" (click)="fetchData()">
+        Fetch Data
+      </button>
+    </li>
   </ul>
   <div class="spacer"></div>
+
   <a
     aria-label="Angular on twitter"
     target="_blank"
