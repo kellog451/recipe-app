@@ -8,19 +8,25 @@
   <span>Angular Recipe</span>
 
   <ul class="nav navbar">
-    <li><a routerLinkActive="active" routerLink="/recipes">Recipes</a></li>
     <li>
-      <a routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
+      <a routerLinkActive="active" routerLink="/recipes" *ngIf="isAuthenticated"
+        >Recipes</a
+      >
     </li>
     <li>
       <a routerLinkActive="active" routerLink="/shopping-list">Shopping List</a>
     </li>
-    <li class="ms-5">
+    <li>
+      <a routerLinkActive="active" routerLink="/auth" *ngIf="!isAuthenticated"
+        >Sign Up</a
+      >
+    </li>
+    <li class="ms-5" *ngIf="isAuthenticated">
       <button class="btn btn-outline-default" (click)="saveData()">
         Save Data
       </button>
     </li>
-    <li>
+    <li *ngIf="isAuthenticated">
       <button class="btn btn-outline-default" (click)="fetchData()">
         Fetch Data
       </button>
@@ -71,4 +77,11 @@
       />
     </svg>
   </a>
+  <button
+    *ngIf="isAuthenticated"
+    class="btn btn-default text-white"
+    (click)="logout()"
+  >
+    Logout
+  </button>
 </div>

@@ -8,7 +8,7 @@ import {
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { ShoppingListService } from 'src/app/services/ShoppingList.service';
-import { Ingredients } from 'src/app/shared/ingredients.model';
+import { Ingredients } from 'src/app/models/ingredients.model';
 
 @Component({
   selector: 'app-edit-list-item',

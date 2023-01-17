@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
-import { Recipe } from '../recipes/recipe.model';
+import { take, tap, exhaustMap } from 'rxjs';
+import { Recipe } from '../models/recipe.model';
+import { AuthService } from './auth.service';
 import { RecipeService } from './Recipe.service';
 
 @Injectable({
@@ -10,7 +11,12 @@ import { RecipeService } from './Recipe.service';
 export class DataStorageService {
   baseUrl =
     'https://ng-recipe-app-bf25b-default-rtdb.firebaseio.com/recipes.json';
-  constructor(private http: HttpClient, private recipeService: RecipeService) {}
+
+  constructor(
+    private http: HttpClient,
+    private recipeService: RecipeService,
+    private authService: AuthService
+  ) {}
 
   saveRecipes() {
     const recipes = this.recipeService.getRecipes();
@@ -20,7 +26,13 @@ export class DataStorageService {
   }
 
   fetchRecipes() {
-    return this.http.get<Recipe[]>(this.baseUrl).pipe(
+    return this.authService.user.pipe(
+      take(1),
+      exhaustMap((user) => {
+        return this.http.get<Recipe[]>(this.baseUrl, {
+          params: new HttpParams().set('auth', user.token),
+        });
+      }),
       tap((recipes) => {
         this.recipeService.setRecipes(recipes);
       })
