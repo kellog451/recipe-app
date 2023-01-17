@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
+import { environment } from 'src/environments/environment';
 
 export interface AuthResponseData {
   kind: string;
@@ -20,7 +21,7 @@ export interface AuthResponseData {
 export class AuthService {
   user = new BehaviorSubject<User>(null);
 
-  APIKey = 'AIzaSyAZ3p_NmVjKO3M5BB9zi9U9I7MmRx9Tf-4';
+  APIKey = environment.firebaseAPIKey;
   constructor(private http: HttpClient, private router: Router) {}
 
   private tokenExpirationTimer: any;
