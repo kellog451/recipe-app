@@ -5,18 +5,20 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map, take } from 'rxjs';
 import { exhaustMap } from 'rxjs/internal/operators/exhaustMap';
-import { take } from 'rxjs/internal/operators/take';
-import { User } from '../models/user.model';
-import { AuthService } from './auth.service';
+import { AppState } from '../redux/store/initial.state';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store<AppState>) {}
   intercept(request: HttpRequest<any>, next: HttpHandler) {
-    return this.authService.user.pipe(
+    return this.store.select('auth').pipe(
       take(1),
+      map((state) => {
+        return state.user;
+      }),
       exhaustMap((user) => {
         if (!user) {
           return next.handle(request);

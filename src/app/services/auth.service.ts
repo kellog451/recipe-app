@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
 import { environment } from 'src/environments/environment';
+import { Store } from '@ngrx/store';
+import { AppState } from '../redux/store/initial.state';
+import { LoginUser, LogoutUser } from '../redux/actions/auth.action';
 
 export interface AuthResponseData {
   kind: string;
@@ -19,10 +22,14 @@ export interface AuthResponseData {
   providedIn: 'root',
 })
 export class AuthService {
-  user = new BehaviorSubject<User>(null);
+  // user = new BehaviorSubject<User>(null);
 
   APIKey = environment.firebaseAPIKey;
-  constructor(private http: HttpClient, private router: Router) {}
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private store: Store<AppState>
+  ) {}
 
   private tokenExpirationTimer: any;
 
@@ -58,7 +65,15 @@ export class AuthService {
       new Date(new Date().getTime() + expiresIn * 1000)
     );
 
-    this.user.next(user);
+    // this.user.next(user);
+    this.store.dispatch(
+      new LoginUser({
+        id: userId,
+        email,
+        token,
+        tokenExpirationDate: new Date(new Date().getTime() + expiresIn * 1000),
+      })
+    );
     this.autoLogout(expiresIn * 1000);
     localStorage.setItem('userData', JSON.stringify(user));
   }
@@ -110,7 +125,8 @@ export class AuthService {
   }
 
   logout() {
-    this.user.next(null);
+    // this.user.next(null);
+    this.store.dispatch(new LogoutUser());
     this.router.navigate(['/auth']);
     localStorage.removeItem('userData');
     if (this.tokenExpirationTimer) clearTimeout(this.tokenExpirationTimer);
@@ -145,7 +161,15 @@ export class AuthService {
         const timeToExpire =
           new Date(userData.tokenExpirationDate).getTime() -
           new Date().getTime();
-        this.user.next(loadedUser);
+        // this.user.next(loadedUser);
+        this.store.dispatch(
+          new LoginUser({
+            id: userData.id,
+            email: userData.email,
+            token: userData._token,
+            tokenExpirationDate: userData.tokenExpirationDate,
+          })
+        );
         this.autoLogout(timeToExpire);
       }
     }

@@ -6,9 +6,16 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { ShoppingListService } from 'src/app/services/ShoppingList.service';
 import { Ingredients } from 'src/app/models/ingredients.model';
+import {
+  AddIngredient,
+  DeleteIngredient,
+  StopEditIngredient,
+  UpdateIngredient,
+} from 'src/app/redux/actions/shopping-list.action';
+import { AppState } from 'src/app/redux/store/initial.state';
 
 @Component({
   selector: 'app-edit-list-item',
@@ -16,13 +23,12 @@ import { Ingredients } from 'src/app/models/ingredients.model';
   styleUrls: ['./edit-list-item.component.css'],
 })
 export class EditListItemComponent implements OnInit, OnDestroy {
-  @Output() ingredientAdded = new EventEmitter<Ingredients>();
   shoppingForm: FormGroup;
   subscription: Subscription;
   editMode = false;
   indexOfItemToEdit: number;
   itemToEdit: Ingredients;
-  constructor(private slService: ShoppingListService) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.shoppingForm = new FormGroup({
@@ -30,17 +36,18 @@ export class EditListItemComponent implements OnInit, OnDestroy {
       amount: new FormControl(null, Validators.required),
     });
 
-    this.subscription = this.slService.startedEditing.subscribe(
-      (index: number) => {
-        this.indexOfItemToEdit = index;
+    this.subscription = this.store.select('shoppingList').subscribe((state) => {
+      if (state.indexOfSelectedIngredient > -1) {
         this.editMode = true;
-        this.itemToEdit = this.slService.getIngredient(index);
+        this.itemToEdit = state.selectedIngredient;
+        this.indexOfItemToEdit = state.indexOfSelectedIngredient;
+        console.log('Select', state.selectedIngredient);
         this.shoppingForm.setValue({
-          item: this.itemToEdit.name,
-          amount: this.itemToEdit.amount,
+          item: state.selectedIngredient.name,
+          amount: state.selectedIngredient.amount,
         });
-      }
-    );
+      } else this.editMode = false;
+    });
   }
 
   addIngredient() {
@@ -49,19 +56,22 @@ export class EditListItemComponent implements OnInit, OnDestroy {
     const ingAmt = this.shoppingForm.get('amount').value;
     const ingredientData = new Ingredients(ingName, ingAmt);
     if (this.editMode)
-      this.slService.updateIngredient(this.indexOfItemToEdit, ingredientData);
-    else this.slService.addIngredient(ingredientData);
-    this.editMode = false;
-    this.shoppingForm.reset();
+      this.store.dispatch(new UpdateIngredient(ingredientData));
+    else {
+      this.store.dispatch(new AddIngredient(ingredientData));
+    }
+    this.clearForm();
   }
 
   clearForm() {
     this.shoppingForm.reset();
+    this.store.dispatch(new StopEditIngredient());
     this.editMode = false;
   }
 
   deleteIngredient() {
-    this.slService.deleteIngredient(this.indexOfItemToEdit);
+    this.store.dispatch(new DeleteIngredient());
+    this.clearForm();
   }
 
   ngOnDestroy(): void {

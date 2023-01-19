@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { ShoppingListService } from '../services/ShoppingList.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Ingredients } from '../models/ingredients.model';
+import { StartEditIngredient } from '../redux/actions/shopping-list.action';
+import { ShoppingState } from '../redux/reducers/shopping-list.reducer';
+import { AppState } from '../redux/store/initial.state';
 
 @Component({
   selector: 'app-shopping-list',
@@ -9,25 +12,16 @@ import { Ingredients } from '../models/ingredients.model';
   styleUrls: ['./shopping-list.component.css'],
 })
 export class ShoppingListComponent implements OnInit {
-  ingredientsList: Ingredients[] = [];
-  subscription: Subscription;
+  ingredientsList: Observable<ShoppingState>;
+  // subscription: Subscription;
 
-  constructor(private slService: ShoppingListService) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.ingredientsList = this.slService.getIngredients();
-    this.subscription = this.slService.ingredientsChanged.subscribe(
-      (ingredients) => {
-        this.ingredientsList = ingredients;
-      }
-    );
-  }
-
-  addIngredient(item: Ingredients) {
-    this.slService.addIngredient(item);
+    this.ingredientsList = this.store.select('shoppingList');
   }
 
   onEditItem(index: number) {
-    this.slService.startedEditing.next(index);
+    this.store.dispatch(new StartEditIngredient(index));
   }
 }

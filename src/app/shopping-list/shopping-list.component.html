@@ -8,7 +8,10 @@
             class="list-group-item list-group-item-action"
             role="button"
             (click)="onEditItem(i)"
-            *ngFor="let item of ingredientsList; let i = index"
+            *ngFor="
+              let item of (ingredientsList | async).ingredients;
+              let i = index
+            "
           >
             {{ item.name }} ({{ item.amount }})
           </a>
@@ -16,9 +19,7 @@
       </div>
     </div>
     <div class="col-md-6">
-      <app-edit-list-item
-        (ingredientAdded)="addIngredient($event)"
-      ></app-edit-list-item>
+      <app-edit-list-item></app-edit-list-item>
     </div>
   </div>
 </div>

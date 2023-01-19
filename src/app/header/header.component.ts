@@ -1,12 +1,8 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { map, Subscription } from 'rxjs';
+import { LogoutUser } from '../redux/actions/auth.action';
+import { AppState } from '../redux/store/initial.state';
 import { DataStorageService } from '../services/data-storage.service';
 
 @Component({
@@ -20,18 +16,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   constructor(
     private dataStorageService: DataStorageService,
-    private authService: AuthService
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user.subscribe({
-      next: (user) => {
-        this.isAuthenticated = !!user;
-        console.log('----------', this.isAuthenticated);
-        console.log('----------', user);
-      },
-      error: (error) => {},
-    });
+    this.userSubscription = this.store
+      .select('auth')
+      .pipe(map((state) => state.user))
+      .subscribe({
+        next: (user) => {
+          this.isAuthenticated = !!user;
+          console.log('----------', this.isAuthenticated);
+          console.log('----------', user);
+        },
+        error: (error) => {},
+      });
   }
 
   saveData() {
@@ -43,7 +42,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    this.authService.logout();
+    // this.authService.logout();
+    this.store.dispatch(new LogoutUser());
   }
 
   ngOnDestroy(): void {
