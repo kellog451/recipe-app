@@ -5,8 +5,13 @@
   </button>
 </div>
 <div>
-  <app-recipe-list-item
-    *ngFor="let item of recipes"
-    [recipe]="item"
-  ></app-recipe-list-item>
+  <div *ngIf="loading" class="text-center mt-5">
+    <app-loading-spinner></app-loading-spinner>
+  </div>
+  <div *ngIf="!loading">
+    <app-recipe-list-item
+      *ngFor="let item of recipes"
+      [recipe]="item"
+    ></app-recipe-list-item>
+  </div>
 </div>

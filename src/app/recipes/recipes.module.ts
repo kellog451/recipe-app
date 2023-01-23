@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 import { RecipeDetailsComponent } from './recipe-details/recipe-details.component';
 import { RecipeEditComponent } from './recipe-edit/recipe-edit.component';
 import { RecipeListItemComponent } from './recipe-list/recipe-list-item/recipe-list-item.component';
@@ -32,6 +33,7 @@ import { RecipesComponent } from './recipes.component';
     CommonModule,
     ReactiveFormsModule,
     RecipeRoutingModule,
+    SharedModule,
   ],
 })
 export class RecipesModule {}
