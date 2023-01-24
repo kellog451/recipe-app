@@ -1,7 +1,9 @@
-import { query } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
-import { RecipeService } from 'src/app/services/Recipe.service';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
+import { RecipeActions } from 'src/app/redux/actions/recipe.actions';
+import { AppState } from 'src/app/redux/store/initial.state';
 
 @Component({
   selector: 'app-recipe-details',
@@ -17,16 +19,23 @@ export class RecipeDetailsComponent implements OnInit {
     steps: string[];
   };
   constructor(
-    private recipeService: RecipeService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
     this.activeRoute.params.subscribe((params: Params) => {
-      this.recipe = this.recipeService
-        .getRecipes()
-        .find((recipe) => recipe.id === +params['id']);
+      this.store
+        .select('recipes')
+        .pipe(
+          map((recipes) => {
+            return recipes.recipeList.find(
+              (recipe) => recipe.id === +params['id']
+            );
+          })
+        )
+        .subscribe({ next: (recipe) => (this.recipe = recipe) });
     });
   }
 
@@ -38,7 +47,7 @@ export class RecipeDetailsComponent implements OnInit {
   }
 
   deleteRecipe() {
-    this.recipeService.deleteRecipe(this.recipe.id);
+    this.store.dispatch(RecipeActions.deleteRecipe({ id: this.recipe.id }));
     this.router.navigate(['recipes']);
   }
 }

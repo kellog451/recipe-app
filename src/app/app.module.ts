@@ -16,6 +16,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { AuthEffects } from './redux/effects/auth.effects';
 import { AppState } from './redux/store/initial.state';
 import { environment } from 'src/environments/environment';
+import { RecipeEffects } from './redux/effects/recipe.effects';
 
 export function logger(reducer: ActionReducer<AppState>): any {
   // default, no options
@@ -35,7 +36,7 @@ export const metaReducers = environment.production ? [] : [logger];
     CoreModule,
     AuthModule,
     StoreModule.forRoot(rootReducer, { metaReducers }),
-    EffectsModule.forRoot([AuthEffects]),
+    EffectsModule.forRoot([AuthEffects, RecipeEffects]),
   ],
   providers: [],
   bootstrap: [AppComponent],

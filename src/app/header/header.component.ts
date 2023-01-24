@@ -1,11 +1,9 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { LogoutUser } from '../redux/actions/auth.action';
+import { RecipeActions } from '../redux/actions/recipe.actions';
 import { AppState } from '../redux/store/initial.state';
-import { DataStorageService } from '../services/data-storage.service';
-
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -15,10 +13,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userSubscription: Subscription;
   isAuthenticated = false;
 
-  constructor(
-    private dataStorageService: DataStorageService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.userSubscription = this.store
@@ -33,11 +28,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   saveData() {
-    this.dataStorageService.saveRecipes();
+    this.store.dispatch(RecipeActions.saveRecipe());
   }
 
   fetchData() {
-    this.dataStorageService.fetchRecipes().subscribe();
+    this.store.dispatch(RecipeActions.fetchRecipes());
   }
 
   logout() {

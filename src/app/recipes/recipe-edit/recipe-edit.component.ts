@@ -1,8 +1,10 @@
-import { identifierName } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import { RecipeService } from 'src/app/services/Recipe.service';
+import { Store } from '@ngrx/store';
+import { map } from 'rxjs';
+import { RecipeActions } from 'src/app/redux/actions/recipe.actions';
+import { AppState } from 'src/app/redux/store/initial.state';
 
 @Component({
   selector: 'app-recipe-edit',
@@ -20,9 +22,9 @@ export class RecipeEditComponent implements OnInit {
   recipeForm: FormGroup;
   isEditing = false;
   constructor(
-    private recipeService: RecipeService,
     private activeRoute: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private store: Store<AppState>
   ) {}
 
   ngOnInit(): void {
@@ -33,9 +35,18 @@ export class RecipeEditComponent implements OnInit {
       steps: new FormArray([]),
     });
     this.activeRoute.params.subscribe((params: Params) => {
-      this.recipe = this.recipeService
-        .getRecipes()
-        .find((recipe) => recipe.id === +params['id']);
+      this.store
+        .select('recipes')
+        .pipe(
+          map((state) =>
+            state.recipeList.find((recipe) => recipe.id === +params['id'])
+          )
+        )
+        .subscribe({
+          next: (recipe) => {
+            this.recipe = recipe;
+          },
+        });
       this.isEditing = params['id'] != null;
       this.initializeForm();
     });
@@ -79,21 +90,29 @@ export class RecipeEditComponent implements OnInit {
 
   submitForm() {
     if (this.isEditing)
-      this.recipeService.updateRecipe(this.recipe.id, {
-        id: this.recipe.id,
-        ...this.recipeForm.value,
-      });
+      this.store.dispatch(
+        RecipeActions.updateRecipe({
+          id: this.recipe.id,
+          recipe: {
+            id: this.recipe.id,
+            ...this.recipeForm.value,
+          },
+        })
+      );
     else
-      this.recipeService.addRecipe({
-        id: Math.floor(Math.random() * 1000),
-        ...this.recipeForm.value,
-      });
-    console.log(this.recipeForm.value);
+      this.store.dispatch(
+        RecipeActions.addRecipe({
+          recipe: {
+            id: Math.floor(Math.random() * 1000),
+            ...this.recipeForm.value,
+          },
+        })
+      );
+
     this.cancelAction();
   }
 
   cancelAction() {
-    // this.router.navigate(['recipes', this.recipe.id]);
     this.router.navigate(['../'], { relativeTo: this.activeRoute });
   }
 }

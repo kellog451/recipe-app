@@ -1,4 +1,5 @@
 import { Ingredients } from 'src/app/models/ingredients.model';
+import { Recipe } from 'src/app/models/recipe.model';
 import { User } from 'src/app/models/user.model';
 
 export interface AppState {
@@ -11,6 +12,11 @@ export interface AppState {
     ingredients: Ingredients[];
     selectedIngredient: Ingredients;
     indexOfSelectedIngredient: number;
+  };
+  recipes: {
+    loading: boolean;
+    recipeList: Recipe[];
+    recipeError: string;
   };
 }
 
@@ -30,5 +36,10 @@ export const appInitialState: AppState = {
     ],
     selectedIngredient: null,
     indexOfSelectedIngredient: -1,
+  },
+  recipes: {
+    loading: false,
+    recipeList: [],
+    recipeError: null,
   },
 };

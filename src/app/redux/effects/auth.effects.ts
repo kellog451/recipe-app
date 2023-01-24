@@ -48,7 +48,8 @@ export class AuthEffects {
               response.localId,
               response.email,
               response.idToken,
-              +response.expiresIn
+              +response.expiresIn,
+              true
             )
           ),
           catchError((errorResponse) => {
@@ -80,7 +81,8 @@ export class AuthEffects {
               response.localId,
               response.email,
               response.idToken,
-              +response.expiresIn
+              +response.expiresIn,
+              true
             )
           ),
           catchError((errorResponse) => handleError(errorResponse))
@@ -91,8 +93,8 @@ export class AuthEffects {
   @Effect({ dispatch: false })
   authSuccess = this.actions$.pipe(
     ofType(authActionTypes.LOGIN_USER_SUCCESS),
-    tap(() => {
-      this.router.navigate(['/recipes']);
+    tap((authResponse: LoginUser) => {
+      if (authResponse.payload.redirect) this.router.navigate(['/recipes']);
     })
   );
 
@@ -137,6 +139,7 @@ export class AuthEffects {
             email: userData.email,
             token: userData._token,
             tokenExpirationDate: userData.tokenExpirationDate,
+            redirect: false,
           });
         }
       }
@@ -149,7 +152,8 @@ const handleAuthentication = (
   userId: string,
   email: string,
   token: string,
-  expiresIn: number
+  expiresIn: number,
+  redirect: boolean
 ) => {
   const user = new User(
     userId,
@@ -165,6 +169,7 @@ const handleAuthentication = (
     email,
     token,
     tokenExpirationDate: new Date(new Date().getTime() + expiresIn * 1000),
+    redirect,
   });
 };
 

@@ -35,6 +35,7 @@ export class LoginUser implements Action {
       email: string;
       token: string;
       tokenExpirationDate: Date;
+      redirect: boolean;
     }
   ) {}
 }
