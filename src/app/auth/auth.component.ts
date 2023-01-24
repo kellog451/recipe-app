@@ -1,16 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AuthResponseData, AuthService } from 'src/app/services/auth.service';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
+import {
+  ClearError,
+  LoginRequest,
+  SignUpRequest,
+} from '../redux/actions/auth.action';
+import { AppState } from '../redux/store/initial.state';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css'],
 })
-export class AuthComponent implements OnInit {
+export class AuthComponent implements OnInit, OnDestroy {
   isLoggingIn = true;
+  storeSubscription: Subscription;
   isLoading = false;
   error: string = null;
   authForm = new FormGroup({
@@ -20,41 +26,38 @@ export class AuthComponent implements OnInit {
       Validators.minLength(6),
     ]),
   });
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private store: Store<AppState>) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.storeSubscription = this.store.select('auth').subscribe({
+      next: (state) => {
+        this.isLoading = state.loading;
+        this.error = state.authError;
+      },
+    });
+  }
 
   switchAuthMode() {
     this.isLoggingIn = !this.isLoggingIn;
   }
 
   submitForm() {
-    let authObservable: Observable<AuthResponseData>;
     this.isLoading = true;
     const email = this.authForm.value['email'];
     const password = this.authForm.value['password'];
-    console.log('form --->', this.authForm);
     if (this.isLoggingIn) {
-      authObservable = this.authService.signIn(email, password);
+      this.store.dispatch(new LoginRequest({ email, password }));
     } else {
-      authObservable = this.authService.signUp(email, password);
+      this.store.dispatch(new SignUpRequest({ email, password }));
     }
-
-    authObservable.subscribe({
-      next: (response) => {
-        this.isLoading = false;
-        console.log('Response', response);
-        this.router.navigate(['/recipes']);
-        // this.authForm.reset();
-      },
-      error: (error) => {
-        this.isLoading = false;
-        this.error = error;
-      },
-    });
   }
 
   handleError() {
-    this.error = null;
+    // this.error = null;
+    this.store.dispatch(new ClearError());
+  }
+
+  ngOnDestroy(): void {
+    this.storeSubscription.unsubscribe();
   }
 }

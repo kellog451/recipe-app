@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from './services/auth.service';
+import { Store } from '@ngrx/store';
+import { AutoLogin } from './redux/actions/auth.action';
+import { AppState } from './redux/store/initial.state';
 
 @Component({
   selector: 'app-root',
@@ -9,10 +11,9 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit {
   title = 'recipe-project';
 
-  constructor(private authService: AuthService) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
-    this.authService.autoLogin();
-    console.log('Auto Login ran ====================');
+    this.store.dispatch(new AutoLogin());
   }
 }

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Ingredients } from '../models/ingredients.model';
 import { StartEditIngredient } from '../redux/actions/shopping-list.action';
-import { ShoppingState } from '../redux/reducers/shopping-list.reducer';
 import { AppState } from '../redux/store/initial.state';
 
 @Component({
@@ -12,7 +10,7 @@ import { AppState } from '../redux/store/initial.state';
   styleUrls: ['./shopping-list.component.css'],
 })
 export class ShoppingListComponent implements OnInit {
-  ingredientsList: Observable<ShoppingState>;
+  ingredientsList: Observable<any>;
   // subscription: Subscription;
 
   constructor(private store: Store<AppState>) {}

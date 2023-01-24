@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { map, Subscription } from 'rxjs';
 import { LogoutUser } from '../redux/actions/auth.action';
@@ -26,8 +27,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           this.isAuthenticated = !!user;
-          console.log('----------', this.isAuthenticated);
-          console.log('----------', user);
         },
         error: (error) => {},
       });
@@ -42,7 +41,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
-    // this.authService.logout();
     this.store.dispatch(new LogoutUser());
   }
 

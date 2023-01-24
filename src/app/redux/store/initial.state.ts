@@ -1,15 +1,24 @@
 import { Ingredients } from 'src/app/models/ingredients.model';
-import { AuthState } from '../reducers/auth.reducer';
-import { ShoppingState } from '../reducers/shopping-list.reducer';
+import { User } from 'src/app/models/user.model';
 
 export interface AppState {
-  auth: AuthState;
-  shoppingList: ShoppingState;
+  auth: {
+    loading: boolean;
+    user: User;
+    authError: string;
+  };
+  shoppingList: {
+    ingredients: Ingredients[];
+    selectedIngredient: Ingredients;
+    indexOfSelectedIngredient: number;
+  };
 }
 
 export const appInitialState: AppState = {
   auth: {
+    loading: false,
     user: null,
+    authError: null,
   },
 
   shoppingList: {

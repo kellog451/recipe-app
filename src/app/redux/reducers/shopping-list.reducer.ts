@@ -2,18 +2,10 @@ import { Ingredients } from 'src/app/models/ingredients.model';
 import { shoppingListActionsTypes } from '../actions/shopping-list.action';
 import { appInitialState } from '../store/initial.state';
 
-export interface ShoppingState {
-  ingredients: Ingredients[];
-  selectedIngredient: Ingredients;
-  indexOfSelectedIngredient: number;
-}
-
 export function shoppingListReducer(
   state = appInitialState.shoppingList,
   action: { type: string; payload?: any }
 ) {
-  console.log('state', state);
-  console.log('action', action);
   switch (action.type) {
     case shoppingListActionsTypes.ADD_INGREDIENT:
       return { ...state, ingredients: [...state.ingredients, action.payload] };
